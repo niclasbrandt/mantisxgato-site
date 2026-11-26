@@ -1,0 +1,420 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Terminal from '../components/Terminal.astro';
+import { SITE } from '../config';
+
+const perspektiv = [
+  {
+    nr: '01',
+    namn: 'strategi',
+    rubrik: 'Vart ska vi, och varför?',
+    text: 'Om att fatta beslut när tekniken rör sig snabbare än organisationen. Hur ledningsgrupper prioriterar, tar risker med öppna ögon och gör tekniska satsningar till affär.',
+    amnen: ['AI i ledningsgruppen', 'Digital strategi som går att genomföra', 'Risk som konkurrensfördel'],
+  },
+  {
+    nr: '02',
+    namn: 'teknik',
+    rubrik: 'Vad går faktiskt att göra?',
+    text: 'Ny teknik förklarad utan säljsnack. Vad AI, data och automatisering klarar i dag, var gränserna går och vad det betyder för den som ska använda det på måndag.',
+    amnen: ['Generativ AI utan hype', 'Data som tillgång och belastning', 'Att bygga, köpa eller vänta'],
+  },
+  {
+    nr: '03',
+    namn: 'juridik',
+    rubrik: 'Vad får vi göra?',
+    text: 'Regelverken som formar tekniken, på ett språk som går att förstå. Juridik som ett verktyg för att våga, inte bara en lista över vad som är förbjudet.',
+    amnen: ['AI-förordningen i praktiken', 'GDPR och dataflöden', 'Avtal, ansvar och immaterialrätt'],
+  },
+];
+
+const format = [
+  { namn: 'Föreläsning', tid: '30–60 min', text: 'Inspiration och överblick för konferenser, kickoffer och frukostmöten.' },
+  { namn: 'Workshop', tid: '2–4 h', text: 'Vi jobbar med er egen verksamhet och landar i konkreta nästa steg.' },
+  { namn: 'Moderering', tid: 'efter behov', text: 'Panelsamtal och konferenser som håller tråden mellan juridik, teknik och affär.' },
+  { namn: 'Utbildning', tid: 'halv–heldag', text: 'Fördjupning för ledningsgrupper, styrelser och team.' },
+];
+---
+
+<Base>
+  <Header />
+
+  <main id="innehall">
+    <!-- Hero -->
+    <section class="wrap hero">
+      <div class="box hero-box" id="hero" title="Klappa djuren">
+        <pre aria-hidden="true"><span class="namebox">    MANTIS    <span class="pink">×</span>     GATO    </span>
+      <span class="mantis" data-who="mantis">\<span id="m-eyes">o_o</span>/</span>         <span class="pink" data-who="cat">/\_/\</span>
+       <span class="mantis" data-who="mantis"><span id="m-arms">)|(</span></span>         <span class="pink" data-who="cat">( <span id="eyes">o.o</span> )</span>
+       <span class="mantis" data-who="mantis">/ \</span>          <span class="pink" data-who="cat">&gt; ^ &lt;</span>
+
+  strategi · teknik · juridik<span class="cursor">_</span></pre>
+        <span class="say say-mantis" id="m-say" aria-hidden="true"></span>
+        <span class="say say-cat" id="meow" aria-hidden="true"></span>
+      </div>
+      <h1>Föreläsningar i gränslandet mellan juridik, teknik och strategi.</h1>
+      <p class="lead">
+        Vi hjälper organisationer att förstå vad ny teknik betyder för affären, vad lagen säger om den och hur
+        man fattar kloka beslut däremellan. Tydligt, roligt och utan krångel.
+      </p>
+      <p><a class="cta box" href="#kontakt">&gt; boka en föreläsning<span class="cursor">_</span></a></p>
+    </section>
+
+    <!-- Perspektiv -->
+    <section id="perspektiv" class="wrap section">
+      <p class="label">[1] Tre perspektiv</p>
+      <div class="grid three">
+        {
+          perspektiv.map((p) => (
+            <article class="box card">
+              <p class="card-head">
+                <span class="pink">[{p.nr}]</span> {p.namn}
+              </p>
+              <h2>{p.rubrik}</h2>
+              <p>{p.text}</p>
+              <ul class="topics">
+                {p.amnen.map((a) => <li>{a}</li>)}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Terminal -->
+    <section id="terminal" class="wrap section">
+      <p class="label">[2] Prova själv</p>
+      <Terminal />
+    </section>
+
+    <!-- Format -->
+    <section id="format" class="wrap section">
+      <p class="label">[3] Format</p>
+      <div class="box table">
+        {
+          format.map((f) => (
+            <div class="row">
+              <h3>{f.namn}</h3>
+              <span class="tid">{f.tid}</span>
+              <p>{f.text}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="note">Alla upplägg anpassas efter publik och tillfälle. På plats eller digitalt, på svenska eller engelska.</p>
+    </section>
+
+    <!-- Om -->
+    <section id="om" class="wrap section">
+      <p class="label">[4] Om oss</p>
+      <div class="grid two">
+        <div>
+          <h2>En mantis och en katt.</h2>
+          <p>
+            Mantis × Gato samlar tre perspektiv som sällan sitter vid samma bord. Vi översätter mellan jurister,
+            utvecklare och ledning, så att alla förstår varandra och kan gå vidare.
+          </p>
+          <p>
+            Vi tror att svåra frågor blir enklare när man ser dem från flera håll, och att en bra föreläsning ska
+            vara lika rolig som den är användbar.
+          </p>
+        </div>
+        <div class="box ascii-side" aria-hidden="true">
+          <pre>  strategi ─┐
+            │
+  teknik ───┼──<span class="pink">×</span>── beslut
+            │
+  juridik ──┘</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kontakt -->
+    <section id="kontakt" class="wrap section">
+      <p class="label">[5] Kontakt</p>
+      <div class="box contact">
+        <h2>Ska vi prata?</h2>
+        <p>Berätta om ert event, er publik och vad ni vill att de ska gå därifrån med. Vi återkommer inom ett par dagar.</p>
+        <p class="mail"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <span class="badge box" aria-hidden="true"><span class="pink">(=^.^=)</span> MxG</span>
+    <p>© {new Date().getFullYear()} {SITE.name}<br />Inga kakor här. Katten åt upp dem.</p>
+  </footer>
+</Base>
+
+<style>
+  .hero {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+  }
+  .hero-box {
+    position: relative;
+    cursor: pointer;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    margin-bottom: 2.5rem;
+    overflow-x: auto;
+  }
+  .namebox {
+    display: inline-block;
+    border: 2px solid var(--ink);
+    padding: 0.55em 0.5ch;
+    margin-bottom: 0.6em;
+  }
+  .mantis {
+    font-weight: 600;
+  }
+  [data-who] {
+    cursor: pointer;
+  }
+  .hero-box {
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  .say {
+    position: absolute;
+    top: 1rem;
+    padding: 0.25rem 0.6rem;
+    border: var(--dash);
+    color: var(--pink);
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+  .say-mantis {
+    left: 1.25rem;
+    color: var(--ink) !important;
+  }
+  .say-cat {
+    right: 1.25rem;
+  }
+  .say.show {
+    opacity: 1;
+    transform: none;
+  }
+  pre {
+    margin: 0;
+    font-family: var(--mono);
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .hero-box pre {
+    font-size: clamp(13px, 3.6vw, 24px);
+  }
+  h1 {
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    max-width: 38ch;
+  }
+  .lead {
+    font-size: 1.0625rem;
+    max-width: 62ch;
+  }
+  .cta {
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 0.5rem;
+    transition: background 0.15s, color 0.15s;
+  }
+  .cta:active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  @media (hover: hover) {
+    .cta:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+  }
+
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  .grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .three {
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  }
+  .two {
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    align-items: center;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+  .card-head {
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .card h2 {
+    font-size: 1.25rem;
+  }
+  .topics {
+    list-style: none;
+    padding: 1rem 0 0;
+    margin: 0;
+    border-top: var(--dash);
+    font-size: 0.875rem;
+  }
+  .topics li::before {
+    content: '> ';
+    color: var(--pink);
+  }
+
+  .table .row {
+    display: grid;
+    grid-template-columns: 12rem 9rem 1fr;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    align-items: baseline;
+  }
+  .table .row + .row {
+    border-top: var(--dash);
+  }
+  .row h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .row p {
+    margin: 0;
+  }
+  .tid {
+    color: var(--pink);
+    font-size: 0.875rem;
+  }
+  @media (max-width: 44rem) {
+    .table .row {
+      grid-template-columns: 1fr auto;
+    }
+    .row p {
+      grid-column: 1 / -1;
+    }
+  }
+  .note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .ascii-side {
+    padding: 2rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+  .ascii-side pre {
+    font-size: clamp(12px, 2.6vw, 16px);
+  }
+
+  .contact {
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .contact p {
+    max-width: 52ch;
+    margin-inline: auto;
+  }
+  .mail {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+  }
+
+  footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    font-size: 0.8125rem;
+  }
+  footer p {
+    margin: 0;
+  }
+  .badge {
+    width: 88px;
+    height: 31px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    gap: 0.25em;
+  }
+</style>
+
+<script>
+  const $ = (id: string) => document.getElementById(id)!;
+  const box = $('hero');
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pick = <T,>(xs: T[]) => xs[Math.floor(Math.random() * xs.length)];
+
+  // Varje djur: ögon som blinkar, en reaktion vid klick och en pratbubbla.
+  const critters = {
+    cat: {
+      eyes: $('eyes'), open: 'o.o', shut: '-.-', happy: '^.^',
+      bubble: $('meow'),
+      lines: ['mjau!', 'mjau!', 'mjau!', 'purr …'],
+      react() {},
+      reset() {},
+    },
+    mantis: {
+      eyes: $('m-eyes'), open: 'o_o', shut: '-_-', happy: '°_°',
+      bubble: $('m-say'),
+      lines: ['hmm.', 'det beror på.', '§ noterat.', 'enligt praxis …', '*ber om ordet*'],
+      react() { $('m-arms').textContent = '>|<'; },
+      reset() { $('m-arms').textContent = ')|('; },
+    },
+  };
+  type Who = keyof typeof critters;
+
+  if (!calm) {
+    for (const c of Object.values(critters)) {
+      const loop = () =>
+        setTimeout(() => {
+          if (c.eyes.textContent === c.open) {
+            c.eyes.textContent = c.shut;
+            setTimeout(() => (c.eyes.textContent = c.open), 160);
+          }
+          loop();
+        }, 2500 + Math.random() * 4500);
+      loop();
+    }
+  }
+
+  const timers: Partial<Record<Who, ReturnType<typeof setTimeout>>> = {};
+  function poke(who: Who) {
+    const c = critters[who];
+    c.eyes.textContent = c.happy;
+    c.react();
+    c.bubble.textContent = pick(c.lines);
+    c.bubble.classList.add('show');
+    clearTimeout(timers[who]);
+    timers[who] = setTimeout(() => {
+      c.eyes.textContent = c.open;
+      c.reset();
+      c.bubble.classList.remove('show');
+    }, 1400);
+  }
+
+  box.addEventListener('click', (e) => {
+    const who = (e.target as HTMLElement).closest<HTMLElement>('[data-who]')?.dataset.who as Who | undefined;
+    if (who) poke(who);
+    else (['mantis', 'cat'] as Who[]).forEach(poke);
+  });
+</script>

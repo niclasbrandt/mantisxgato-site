@@ -1,0 +1,249 @@
+---
+import { SITE } from '../config';
+---
+
+<div class="term box" data-email={SITE.email}>
+  <div class="bar" aria-hidden="true">
+    <span>gato@mxg:~</span>
+    <span class="dots"><span class="pink">●</span> ○ ○</span>
+  </div>
+  <div class="screen">
+    <div class="out" role="log" aria-live="polite" aria-label="Terminalens utdata"></div>
+    <form class="prompt" autocomplete="off">
+      <label for="term-input"><span class="pink">gato@mxg</span>:~$</label>
+      <input
+        id="term-input"
+        type="text"
+        aria-label="Skriv ett kommando"
+        spellcheck="false"
+        autocapitalize="off"
+        enterkeyhint="send"
+        aria-describedby="term-hint"
+      />
+    </form>
+  </div>
+  <p id="term-hint" class="hint">
+    Skriv <kbd>hjälp</kbd> och tryck Enter.<span class="keys"> Pil upp för historik, Tab för att fylla i.</span>
+  </p>
+  <noscript><p class="hint">Terminalen behöver JavaScript. Allt innehåll finns också på sidan nedanför.</p></noscript>
+</div>
+
+<style>
+  .term {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    border-bottom: 1px dashed var(--paper);
+    opacity: 0.85;
+  }
+  .screen {
+    padding: 1rem;
+    font-size: 1rem;
+    height: 22rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    cursor: text;
+  }
+  .out :global(pre) {
+    margin: 0 0 0.25rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: var(--mono);
+    color: var(--paper);
+  }
+  .out :global(.cmd) {
+    color: #b9b4a6;
+  }
+  .out :global(.pink) {
+    color: var(--pink);
+  }
+  .out :global(a) {
+    color: var(--paper);
+  }
+  .prompt {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+  label {
+    white-space: nowrap;
+  }
+  input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    color: var(--paper);
+    font: inherit;
+    font-size: max(16px, 1em);
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    caret-color: var(--pink);
+    padding: 0;
+  }
+  input:focus {
+    outline: none;
+  }
+  .term:focus-within {
+    outline: 2px solid var(--pink);
+    outline-offset: 3px;
+  }
+  .hint {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    color: #b9b4a6;
+    border-top: 1px dashed var(--paper);
+  }
+  @media (pointer: coarse) {
+    .keys {
+      display: none;
+    }
+  }
+  kbd {
+    font-family: var(--mono);
+    color: var(--pink);
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.term')!;
+  const out = root.querySelector<HTMLElement>('.out')!;
+  const screen = root.querySelector<HTMLElement>('.screen')!;
+  const form = root.querySelector<HTMLFormElement>('form')!;
+  const input = root.querySelector<HTMLInputElement>('input')!;
+  const email = root.dataset.email ?? '';
+
+  const esc = (s: string) =>
+    s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+  const cat = (say: string) => `<span class="pink"> /\\_/\\ </span>  ${say}
+<span class="pink">( o.o )</span>
+<span class="pink"> &gt; ^ &lt; </span>`;
+
+  const commands: Record<string, (args: string[]) => string | null> = {
+    hjälp: () => `Tillgängliga kommandon:
+  <span class="pink">strategi</span>   vart ska vi, och varför?
+  <span class="pink">teknik</span>     vad går faktiskt att göra?
+  <span class="pink">juridik</span>    vad får vi göra?
+  <span class="pink">format</span>     föreläsning, workshop, moderering …
+  <span class="pink">boka</span>       hör av dig
+  <span class="pink">vem</span>        vilka är vi?
+  <span class="pink">ls</span>         lista sidans delar
+  <span class="pink">mjau</span>       prata med katten
+  <span class="pink">mantis</span>     prata med bönsyrsan
+  <span class="pink">kakor</span>      finns det cookies?
+  <span class="pink">datum</span>      vad är klockan?
+  <span class="pink">rensa</span>      töm skärmen`,
+    strategi: () =>
+      `[01] strategi\nBeslut när tekniken rör sig snabbare än organisationen.\n> AI i ledningsgruppen\n> Digital strategi som går att genomföra\n> Risk som konkurrensfördel`,
+    teknik: () =>
+      `[02] teknik\nNy teknik förklarad utan säljsnack.\n> Generativ AI utan hype\n> Data som tillgång och belastning\n> Att bygga, köpa eller vänta`,
+    juridik: () =>
+      `[03] juridik\nJuridik som verktyg för att våga.\n> AI-förordningen i praktiken\n> GDPR och dataflöden\n> Avtal, ansvar och immaterialrätt`,
+    format: () =>
+      `Föreläsning   30–60 min\nWorkshop      2–4 h\nModerering    efter behov\nUtbildning    halv–heldag`,
+    boka: () =>
+      `Öppnar kontaktuppgifter …\n> <a href="mailto:${esc(email)}">${esc(email)}</a>\nBerätta om ert event, så återkommer vi.`,
+    vem: () => `En mantis och en katt.\nVi översätter mellan jurister, utvecklare och ledning.`,
+    ls: () => `perspektiv/  terminal/  format/  om-oss/  kontakt/`,
+    cd: (a) => {
+      const map: Record<string, string> = {
+        perspektiv: 'perspektiv', terminal: 'terminal', format: 'format', 'om-oss': 'om', kontakt: 'kontakt',
+      };
+      const target = map[(a[0] ?? '').replace(/\/$/, '')];
+      if (!target) return `cd: ${esc(a[0] ?? '')}: katalogen finns inte`;
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.getElementById(target)?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
+      return `→ ${target}/`;
+    },
+    mjau: () => {
+      const svar = ['Mjau.', 'Har du läst villkoren? Inte jag heller.', 'Purr … det beror på.', 'Jag är inte din jurist. Men jag är en katt.', 'Strategi: sov först, jaga sen.'];
+      return cat(svar[Math.floor(Math.random() * svar.length)]);
+    },
+    mantis: () => {
+      const svar = ['Hmm. Det beror på.', 'Jag ber inte. Jag analyserar.', '§ noterat.', 'Tålamod är också en strategi.', 'Enligt praxis … ja, enligt praxis.'];
+      return `<b>  \\o_o/ </b>  ${svar[Math.floor(Math.random() * svar.length)]}
+<b>   )|(  </b>
+<b>   / \\  </b>`;
+    },
+    kakor: () => 'Inga kakor här. Ingen spårning, ingen statistik, inget sparas. Katten åt upp dem.',
+    datum: () => new Date().toLocaleString('sv-SE'),
+    whoami: () => 'besökare (obekräftad) – men vi gillar dig ändå',
+    sudo: () => 'Åtkomst nekad. Behörighet kräver ett personuppgiftsbiträdesavtal.',
+    rm: () => 'Nej. Den raderingen saknar rättslig grund.',
+    exit: () => 'Det finns ingen utgång. Bara fler föreläsningar.',
+    echo: (a) => esc(a.join(' ')),
+    rensa: () => {
+      out.innerHTML = '';
+      return null;
+    },
+  };
+  const alias: Record<string, string> = {
+    help: 'hjälp', hjalp: 'hjälp', '?': 'hjälp', clear: 'rensa', meow: 'mjau', kontakt: 'boka',
+    om: 'vem', cookies: 'kakor', date: 'datum', cls: 'rensa', mail: 'boka',
+  };
+  const names = [...Object.keys(commands), ...Object.keys(alias)];
+
+  function print(html: string, cls = '') {
+    const pre = document.createElement('pre');
+    if (cls) pre.className = cls;
+    pre.innerHTML = html;
+    out.appendChild(pre);
+    screen.scrollTop = screen.scrollHeight;
+  }
+
+  function run(line: string) {
+    print(`<span class="pink">gato@mxg</span>:~$ ${esc(line)}`, 'cmd');
+    const [raw, ...args] = line.trim().split(/\s+/);
+    if (!raw) return;
+    const name = raw.toLowerCase();
+    const fn = commands[alias[name] ?? name];
+    const result = fn ? fn(args) : `kommando saknas: ${esc(raw)}. Skriv <span class="pink">hjälp</span>.`;
+    if (result !== null) print(result);
+  }
+
+  const history: string[] = [];
+  let pos = 0;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const line = input.value;
+    input.value = '';
+    if (line.trim()) history.push(line);
+    pos = history.length;
+    run(line);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp' && pos > 0) {
+      input.value = history[--pos];
+      e.preventDefault();
+    } else if (e.key === 'ArrowDown') {
+      pos = Math.min(pos + 1, history.length);
+      input.value = history[pos] ?? '';
+      e.preventDefault();
+    } else if (e.key === 'Tab' && input.value) {
+      const match = names.find((n) => n.startsWith(input.value.toLowerCase()));
+      if (match) {
+        input.value = match;
+        e.preventDefault();
+      }
+    }
+  });
+
+  screen.addEventListener('click', () => {
+    if (!window.getSelection()?.toString()) input.focus({ preventScroll: true });
+  });
+
+  print(`Välkommen till Mantis × Gato.\nSkriv <span class="pink">hjälp</span> för att komma igång.`);
+</script>

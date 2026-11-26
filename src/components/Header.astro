@@ -1,0 +1,66 @@
+---
+const links = [
+  { href: '#perspektiv', label: 'perspektiv' },
+  { href: '#terminal', label: 'terminal' },
+  { href: '#format', label: 'format' },
+  { href: '#om', label: 'om oss' },
+  { href: '#kontakt', label: 'kontakt' },
+];
+---
+
+<header class="wrap">
+  <a href="/" class="logo box" aria-label="Mantis × Gato, startsida">[M<span class="pink">×</span>G]</a>
+  <nav aria-label="Huvudmeny">
+    <ul>
+      {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .logo {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  ul {
+    display: flex;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    font-size: 0.9375rem;
+  }
+  ul a {
+    text-decoration: none;
+  }
+  ul a::before {
+    content: './';
+    color: var(--pink);
+  }
+  @media (hover: hover) {
+    ul a:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--pink);
+    }
+  }
+  ul a {
+    display: inline-block;
+    padding: 0.35rem 0;
+  }
+</style>
